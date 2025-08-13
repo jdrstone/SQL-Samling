@@ -1,0 +1,2 @@
+# SQL-Samling
+viktig kod
