@@ -1,0 +1,17 @@
+--1) hitta olika kolumntyper
+-----------------------------------------
+with CTE as (SELECT COLUMN_NAME,DATA_TYPE
+             FROM INFORMATION_SCHEMA.COLUMNS
+             WHERE TABLE_SCHEMA = 'DW'
+               AND TABLE_NAME = 'BC_SALESORDERLINE')
+
+SELECT
+    t.COLUMN_NAME,
+    t.DATA_TYPE DW_COLUMN,
+    s.DATA_TYPE STG_VY
+FROM INFORMATION_SCHEMA.COLUMNS t
+
+         left join CTE s on s.COLUMN_NAME = t.COLUMN_NAME
+WHERE TABLE_SCHEMA = 'STG'
+  AND TABLE_NAME = 'BC_SALESORDERLINES_V' and
+    s.DATA_TYPE <> t.DATA_TYPE
