@@ -1,9 +1,10 @@
 --1) hitta olika kolumntyper
 -----------------------------------------
-with CTE as (SELECT COLUMN_NAME,DATA_TYPE
+with CTE as (SELECT COLUMN_NAME
+                  --,DATA_TYPE
              FROM INFORMATION_SCHEMA.COLUMNS
              WHERE TABLE_SCHEMA = 'DW'
-               AND TABLE_NAME = 'BC_PURCHASEORDERLINE_HISTORY')
+               AND TABLE_NAME = 'BC_PURCHASERECEIPTLINE')
 
 SELECT
     t.COLUMN_NAME,
