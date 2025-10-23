@@ -20,15 +20,20 @@ WHERE TABLE_SCHEMA = 'STG'
 ;
 
 --Skapa DW tabelle från vy
+with CTE as (
 SELECT
     t.COLUMN_NAME,
     t.DATA_TYPE DW_COLUMN,
     case
-        when t.DATA_TYPE = 'NUMBER' then concat(t.COLUMN_NAME,'(NUMBER(',t.numeric_precision,',',t.numeric_scale,')),')
+        when t.DATA_TYPE = 'NUMBER' then concat(t.COLUMN_NAME,' NUMBER(',t.numeric_precision,',',t.numeric_scale,'),')
         when t.DATA_TYPE = 'TIMESTAMP_NTZ' then concat(t.COLUMN_NAME,' ',t.DATA_TYPE,',')
         else concat(t.COLUMN_NAME,' VARCHAR,')
-    end
+    end SQLSTRING
 FROM INFORMATION_SCHEMA.COLUMNS t
 WHERE TABLE_SCHEMA = 'STG'
-  AND TABLE_NAME = 'BC_CUSTOMERLEDGERENTRIES_V'
+  AND TABLE_NAME = 'BC_CUSTOMERLEDGERENTRIES_V')
 
+select
+    concat('create table dw.BC_CUSTOMERLEDGERENTRY(',
+    array_to_string(array_agg(SQLSTRING) , '\n' ))
+from cte;
